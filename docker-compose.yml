@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  db:
+    image: mysql
+    container_name: moc-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - "./db_data:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=bee
+      
+  web_server:
+    image: thecodingmachine/php:7.4-v4-apache
+    container_name: moc-server
+    environment:
+      PHP_EXTENSIONS: intl
+    build: .
+    volumes:
+      - ./www/html/:/var/www/html/
+      - ./etc/apache2/sites-available/:/etc/apache2/sites-available/
+    restart: always
+    ports:
+      - 80:80
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: moc-phpmyadmin
+    volumes:
+      - ./etc/php/conf.d/php-phpmyadmin.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: bee
+      MYSQL_ROOT_PASSWORD: bee
+      PMA_USER: root
+      PMA_PASSWORD: bee
+    links:
+      - db
