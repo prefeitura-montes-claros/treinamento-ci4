@@ -20,7 +20,7 @@ Noções da Linguagem PHP, documentação oficial da linguagem: https://www.php.
 
 ### Git
 
-Noções de versionamento com Git, mais detalhes em: https://git-scm.com/
+Noções de versionamento com Git, mais detalhes em: https://git-scm.com/book/pt-br/v2
 
 ### Composer
 

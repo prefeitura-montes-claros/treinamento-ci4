@@ -9,3 +9,5 @@ ENV APACHE_RUN_USER=www-data \
     APACHE_DOCUMENT_ROOT=/var/www/html/ \
     ABSOLUTE_APACHE_DOCUMENT_ROOT=/var/www/html
 
+# Update 
+RUN sudo apt-get update
