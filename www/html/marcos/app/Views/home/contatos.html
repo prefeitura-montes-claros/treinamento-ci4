@@ -1,0 +1,54 @@
+{% extends "home/padrao/modelo.html" %}
+
+{% block conteudo %}
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">{{ title }}</h1>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tipo</th>
+              <th>Nome</th>
+              <th class="text-center">Opções</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            {% for contato in contatos %} 
+            <tr>
+              <td>{{ contato.id }}</td>
+              <td>{{ contato.tipo }}</td>
+              <td>{{ contato.nome }}</td>
+              <td class="text-center">
+                {% if contato.apagado_em %}
+                  <a class="btn btn-sm btn-success" href="{{ base_url }}/desfazer/{{ contato.id }}">
+                    <i class="fas fa-trash-restore"></i>
+                  </a>
+                {% else %}
+                  <a class="btn btn-sm btn-primary" href="{{ base_url }}/visualizar/{{ contato.id }}">
+                    <i class="fas fa-search"></i>
+                  </a>
+                  <a class="btn btn-sm btn-warning text-white" href="{{ base_url }}/editar/{{ contato.id }}">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                  <a class="btn btn-sm btn-danger" href="{{ base_url }}/excluir/{{ contato.id }}">
+                    <i class="fas fa-trash-alt"></i>
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        {{ pager|raw }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
