@@ -1,0 +1,60 @@
+{% extends "home/padrao/modelo.html" %}
+
+{% block conteudo %}
+  <div class="card my-2">
+    <div class="card-header">
+      <h1 class="card-title">{{ title }}</h1>
+    </div>
+
+    <form action="{{ base_url }}/gravar" method="post">
+      <input type="hidden" name="id" value="{{ contato.id }}">
+
+      <div class="card-boby container py-4">
+
+        {{ include('home/padrao/erros.html') }}
+        
+        <div class="row">
+          <div class="col-md-2">
+            <label for="tipo">Tipo</label>
+            <select name="tipo_contato_id" id="tipo" class="form-control">
+              <option value="">Selecione...</option>
+              {% for tipo in tipos %}
+                <option value="{{ tipo.id }}" {{ tipo.id == contato.tipo_contato_id ? 'selected' : '' }} >
+                  {{ tipo.nome }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="col-md-3">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" value="{{ contato.nome }}" class="form-control">
+          </div>
+          
+          <div class="col-md-2">
+            <label for="telefone">Telefone</label>
+            <input type="text" name="telefone" id="telefone" value="{{ contato.telefone }}" class="form-control">
+          </div>
+          
+          <div class="col-md-2">
+            <label for="celular">Celular</label>
+            <input type="text" name="celular" id="celular" value="{{ contato.celular }}" class="form-control">
+          </div>
+          
+          <div class="col-md-3">
+            <label for="email">e-mail</label>
+            <input type="mail" name="email" id="email" value="{{ contato.email }}" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-primary">
+            <i class="far fa-save"></i> Gravar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -7,6 +7,9 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment;
+
 /**
  * Class BaseController
  *
@@ -27,7 +30,8 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = [];
+	protected $helpers = ['text'];
+	protected $view;
 
 	/**
 	 * Constructor.
@@ -45,5 +49,15 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 		// E.g.: $this->session = \Config\Services::session();
+		
+		$appPaths = new \Config\Paths();
+		$appViewPaths = $appPaths->viewDirectory;
+
+		$loader = new FilesystemLoader($appViewPaths);
+
+		$this->view = new Environment($loader, [
+			'auto_reload' => true,
+			'cache' => WRITEPATH.'/cache/twig',
+		]);
 	}
 }

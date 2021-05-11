@@ -1,63 +1,119 @@
-# CodeIgniter 4 Application Starter
+# Treinamento PHP 8 com CodeIgniter 4
 
-## What is CodeIgniter?
+## Projeto
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](http://codeigniter.com).
+Durante o treinamento foi desenvolvido uma agenda, onde foi possível estudar as características e recursos básicos do PHP 8 e CodeIgniter 4 e algumas etapas de desenvolvimento, como:
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+* Utilização do Composer
+    * Criação do Projeto
+    * Instalação do Twig
+* Estrutura dos diretórios
+* Funcionamento do MVC
+* Recursos do Spark
+    * spark make
+    * spark migration
+    * spark seed
+* Migrations
+    * TiposContato
+    * Contato
+* Seeds
+    * TipoContatoSeeder
+* Models
+    * TipoContatoModel
+    * ContatoModel
+* Controller
+    * Home
+* Criação das Views
+    * Utilização de Código PHP na view
+    * Utilização do Paser View do CI4
+    * Utilização do Template Engine Twig.
+* Publicação das etapas no Git.
 
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
+---
+## Docker
 
-The user guide corresponding to this version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+Também foi abordado a utilização do Docker como ambiente de desenvolvimento, onde foi demonstrado a utilização da extensão do Docker para o VSCode e as configurações básicas do arquivo `docker-compose` e `Dockerfile`, para gerar um ambiente LAMP com PHP 8, MySQL 8 e phpMyAdmin.
 
-## Installation & updates
+---
+## Composer
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+Após clonar esse repositório, antes de executar é necessário instalar todas as dependências utilizando o Composer, para isso basta acessar o diretório do projeto e utilizando o terminal executar o comando:
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+    composer install
 
-## Setup
+Obs. Se estiver utilizando o Docker é necessário acessar o terminal da imagem PHP, conforme print. 
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+![terminal docker](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/terminal-docker.png)
 
-## Important Change with index.php
+## Configurar o CodeIgniter
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Faça uma cópia do arquivo `env` e o nomeie com `.env`, se necessário altere os parâmetros "baseUrl" e "database.default". 
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Exemplo:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+    app.baseURL = 'http://localhost/agenda/public'
 
-## Repository Management
+ou se estiver usando vhost
 
-We use Github issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+    app.baseURL = 'http://agenda.localhost/'
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+Para utilizar as configurações do banco de dados do arquivo `docker-compose` segue o exemplo:
 
-## Server Requirements
+    database.default.hostname = host.docker.internal
+    database.default.database = agenda
+    database.default.username = root
+    database.default.password = bee
+    database.default.DBDriver = MySQLi
 
-PHP version 7.3 or higher is required, with the following extensions installed:
+---
+## Executar as Migrations
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+É necessário executar as migrations para criação das tabelas do nosso banco de dados. 
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+No gerenciador do MySQL (phpMyAdmin caso esteja utilizando o `docker-compose` de exemplo) crie um novo banco de dados com o nome `agenda`.
 
-- json (enabled by default - don't turn it off)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
-- xml (enabled by default - don't turn it off)
+![phpMyAdmin](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/phpmyadmin.png)
+
+Com o banco de dados criado, execute o comando:
+
+    php spark migrate:status
+
+Tudo ocorrendo bem esse comando exibirá todas as migrations e seus status, conforme print.
+
+![Status da Migration](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/terminal-migrate-status.png)
+
+Para executar a migration basta usar o comando:
+
+    php spark migrate
+
+Será exibido uma saída semelhante ao print, e rodando o comando anterior também é possível verificar que o status agora exibe o Grupo, Lote e Quando a migração ocorreu.
+
+![Execução da Migration](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/terminal-migrate-run.png)
+
+Após a execução das Migrations, podemos verificar como ficou nosso banco de dados no phpMyAdmin.
+
+![Tabelas no Banco](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/phpmyadmin-tabelas.png)
+
+![Tabelas no Banco](https://raw.githubusercontent.com/marcos-queiroz/agenda/master//screenshot/phpmyadmin-banco.png)
+
+
+---
+
+## Seeds
+
+Após criar as tabelas usamos o seed para popula/semear com os tipos de contato que nossa agenda utiliza como padrão.
+
+Para isso basta executar o comando:
+
+    php spark db:seed TipoContatoSeeder
+
+Se nenhum erro ocorrer a tabela `tipos_contato` será populada com 2 registros. 
+
+---
+## Acessar o Projeto
+
+Ao acessar o endereço `http://localhost/agenda/public` será exibido a view de boas vindas.
+
+![name-of-you-image](https://raw.githubusercontent.com/marcos-queiroz/agenda/master/screenshot/home_page.png)
+
+Nessa aplicação é possível cadastrar um novo contato, editar ou excluir. Como foi definido no Model ao clicar em excluir o registro não será excluído `fisicamente` do banco, mas receberá uma marcação indicando que o mesmo foi excluído, dando assim a possibilidade de recuperar o registro.
