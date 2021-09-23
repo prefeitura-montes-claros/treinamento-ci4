@@ -28,6 +28,9 @@ Noções de utilização de gerenciamento de dependências, como estamos desenvo
 
 O Composer é um gerenciador de dependências para PHP, com ele é mais pratico manter todas as dependências do projeto sempre atualizadas, evitando a configuração e atualização manual de bibliotecas que o seu projeto utiliza para mais informações sobre: https://getcomposer.org/
 
+### PHP.INI
+Caso esteja utilizando o xampp descomente a linha `extension=intl` do arquivo php.ini 
+
 ### Docker
 
 Noções de utilização de containers para ambientes de desenvolvimento, para mais detalhes visite: https://www.docker.com/
